@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Passport Photo Creator</string>
+    <string name="app_name_short">PassPhoto</string>
+
 </resources>

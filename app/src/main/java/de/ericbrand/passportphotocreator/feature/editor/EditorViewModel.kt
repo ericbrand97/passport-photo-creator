@@ -1,0 +1,54 @@
+package de.ericbrand.passportphotocreator.feature.editor
+
+import androidx.lifecycle.ViewModel
+import de.ericbrand.passportphotocreator.core.model.CropTransform
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+
+class EditorViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(EditorUiState())
+    val uiState: StateFlow<EditorUiState> = _uiState
+
+    fun onAction(action: EditorAction){
+        when(action){
+            is EditorAction.ImageSelected -> {
+                _uiState.update {
+                    it.copy(
+                        imageUri = action.uri,
+                        imageLoaded = true,
+                        exportReady = true,
+                        errorMessage = null
+                    )
+                }
+            }
+
+            is EditorAction.TransformChanged -> {
+                _uiState.update {
+                    it.copy(
+                        cropTransform = CropTransform(
+                            scale = action.scale,
+                            offsetX = action.offsetX,
+                            offsetY = action.offsetY,
+                            rotation = action.rotation
+                        )
+                    )
+                }
+            }
+
+            EditorAction.ToggleGuides -> {
+                _uiState.update { it.copy(showGuides = !it.showGuides) }
+            }
+
+            EditorAction.ExportClicked -> {
+                // call exporter
+            }
+
+            EditorAction.PickImageClicked -> Unit
+
+            EditorAction.ErrorShown -> {
+                _uiState.update { it.copy(errorMessage = null) }
+            }
+        }
+    }
+}

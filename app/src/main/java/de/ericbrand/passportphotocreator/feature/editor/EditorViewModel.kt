@@ -27,10 +27,9 @@ class EditorViewModel : ViewModel() {
                 _uiState.update {
                     it.copy(
                         cropTransform = CropTransform(
-                            scale = action.scale,
-                            offsetX = action.offsetX,
-                            offsetY = action.offsetY,
-                            rotation = action.rotation
+                            action.scale,
+                            action.rotation,
+                            action.offset
                         )
                     )
                 }

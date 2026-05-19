@@ -44,9 +44,6 @@ private fun Offset.rotateBy(degrees: Float): Offset {
     )
 }
 
-private operator fun Offset.div(value: Float): Offset =
-    Offset(x / value, y / value)
-
 @Composable
 fun CropPreview(
     bitmap: Bitmap,

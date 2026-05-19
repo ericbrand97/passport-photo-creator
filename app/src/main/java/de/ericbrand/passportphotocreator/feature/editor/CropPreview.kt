@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +49,7 @@ private fun Offset.rotateBy(degrees: Float): Offset {
 fun CropPreview(
     bitmap: Bitmap,
     transform: CropTransform,
+    sliderOffset: Offset,
     onTransformChange: (CropTransform) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -88,8 +90,8 @@ fun CropPreview(
                 .fillMaxSize()
                 .wrapContentSize(align = Alignment.Center)
                 .graphicsLayer {
-                    translationX = -transform.offset.x * transform.scale
-                    translationY = -transform.offset.y * transform.scale
+                    translationX = -transform.offset.x * transform.scale + sliderOffset.x
+                    translationY = -transform.offset.y * transform.scale + sliderOffset.y
                     scaleX = transform.scale
                     scaleY = transform.scale
                     rotationZ = transform.rotation

@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -100,11 +101,6 @@ fun EditorScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Button(
-                    onClick = { onAction(EditorAction.PickImageClicked) }
-                ) {
-                    Text("Pick image")
-                }
 
                 Box(
                     modifier = Modifier
@@ -116,13 +112,10 @@ fun EditorScreen(
                         CropPreview(
                             bitmap = bitmap,
                             transform = state.cropTransform,
+                            sliderOffset = state.sliderOffset,
                             onTransformChange = { newTransform ->
                                 onAction(
-                                    EditorAction.TransformChanged(
-                                        newTransform.scale,
-                                        newTransform.rotation,
-                                        newTransform.offset
-                                    )
+                                    EditorAction.TransformChanged(newTransform)
                                 )
                             },
                             modifier = Modifier.matchParentSize()
@@ -155,7 +148,7 @@ fun EditorScreen(
                 ){
                     Text(
                         text = "Guides",
-                        style = MaterialTheme.typography.titleSmall,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.semantics { heading() }
                     )
 

@@ -1,14 +1,16 @@
 package de.ericbrand.passportphotocreator.feature.editor
 
 import androidx.compose.ui.geometry.Offset
+import de.ericbrand.passportphotocreator.core.model.CropTransform
 
 sealed interface EditorAction {
     data object PickImageClicked : EditorAction
     data class ImageSelected(val uri: String) : EditorAction
     data class TransformChanged(
-        val scale: Float,
-        val rotation: Float,
-        val offset: Offset
+        val transform: CropTransform
+    ) : EditorAction
+    data class SliderOffsetChanged(
+        val sliderOffset: Offset
     ) : EditorAction
     data class GuidesSelected(
         val guides: Guides

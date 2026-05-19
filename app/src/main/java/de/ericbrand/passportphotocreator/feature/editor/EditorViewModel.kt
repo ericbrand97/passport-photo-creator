@@ -26,11 +26,15 @@ class EditorViewModel : ViewModel() {
             is EditorAction.TransformChanged -> {
                 _uiState.update {
                     it.copy(
-                        cropTransform = CropTransform(
-                            action.scale,
-                            action.rotation,
-                            action.offset
-                        )
+                        cropTransform = action.transform
+                    )
+                }
+            }
+
+            is EditorAction.SliderOffsetChanged -> {
+                _uiState.update {
+                    it.copy(
+                        sliderOffset = action.sliderOffset
                     )
                 }
             }

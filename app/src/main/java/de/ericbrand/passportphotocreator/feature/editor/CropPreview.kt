@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -78,7 +79,7 @@ fun CropPreview(
     Box(
         modifier = modifier
             .clip(RectangleShape)
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .onSizeChanged { size = it.toSize() }
             .transformable(state = state)
     ) {

@@ -1,6 +1,7 @@
 package de.ericbrand.passportphotocreator.feature.editor
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,9 +27,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.ericbrand.passportphotocreator.R
 import de.ericbrand.passportphotocreator.core.imaging.BitmapLoader
@@ -99,16 +106,6 @@ fun EditorScreen(
                     Text("Pick image")
                 }
 
-                Text(
-                    text = if (state.showGuides) "Guides on" else "Guides off"
-                )
-
-                Button(
-                    onClick = { onAction(EditorAction.ToggleGuides) }
-                ) {
-                    Text("Toggle guides")
-                }
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -130,8 +127,57 @@ fun EditorScreen(
                             },
                             modifier = Modifier.matchParentSize()
                         )
+
+                        if (state.showGuides == Guides.POSITION) {
+                            PositionOverlay()
+                        }
+
+                        else if (state.showGuides == Guides.FACE_HEIGHT) {
+                            FaceHeightOverlay()
+                        }
+
+                        val borderColor = MaterialTheme.colorScheme.surfaceContainerLow
+                        val borderStrokeWidthPx = 5f
+
+                        Canvas(modifier = Modifier.fillMaxSize()) {
+                            drawRect(
+                                color = borderColor,
+                                style = Stroke(borderStrokeWidthPx)
+                            )
+                        }
                     } ?: run {
                         Text("Loading preview...")
+                    }
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ){
+                    Text(
+                        text = "Guides",
+                        style = MaterialTheme.typography.titleSmall,
+                        modifier = Modifier.semantics { heading() }
+                    )
+
+                    SingleChoiceSegmentedButtonRow(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Guides.entries.forEachIndexed { index, option ->
+                            SegmentedButton(
+                                onClick = { onAction(EditorAction.GuidesSelected(option)) },
+                                selected = state.showGuides == option,
+                                shape = SegmentedButtonDefaults.itemShape(index, Guides.entries.size),
+                                label = {
+                                    Text(
+                                        when (option) {
+                                            Guides.NONE -> "None"
+                                            Guides.POSITION -> "Position"
+                                            Guides.FACE_HEIGHT -> "Face height"
+                                        }
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

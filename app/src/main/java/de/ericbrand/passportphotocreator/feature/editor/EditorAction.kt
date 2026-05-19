@@ -10,7 +10,9 @@ sealed interface EditorAction {
         val rotation: Float,
         val offset: Offset
     ) : EditorAction
-    data object ToggleGuides : EditorAction
+    data class GuidesSelected(
+        val guides: Guides
+    ) : EditorAction
     data object ExportClicked : EditorAction
     data object ErrorShown : EditorAction
 }

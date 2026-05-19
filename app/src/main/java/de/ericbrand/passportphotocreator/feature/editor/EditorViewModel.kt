@@ -35,8 +35,10 @@ class EditorViewModel : ViewModel() {
                 }
             }
 
-            EditorAction.ToggleGuides -> {
-                _uiState.update { it.copy(showGuides = !it.showGuides) }
+            is EditorAction.GuidesSelected -> {
+                _uiState.update {
+                    it.copy(showGuides = action.guides)
+                }
             }
 
             EditorAction.ExportClicked -> {

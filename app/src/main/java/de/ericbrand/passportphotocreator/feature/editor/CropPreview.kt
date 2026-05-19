@@ -79,7 +79,7 @@ fun CropPreview(
     Box(
         modifier = modifier
             .clip(RectangleShape)
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
             .onSizeChanged { size = it.toSize() }
             .transformable(state = state)
     ) {

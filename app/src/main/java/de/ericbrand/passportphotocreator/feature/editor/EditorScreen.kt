@@ -1,5 +1,6 @@
 package de.ericbrand.passportphotocreator.feature.editor
 
+import android.app.Activity
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -10,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArtTrack
 import androidx.compose.material.icons.outlined.PhotoLibrary
+import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +45,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.ericbrand.passportphotocreator.core.imaging.BitmapLoader
 import de.ericbrand.passportphotocreator.core.model.CropTransform
+import de.ericbrand.passportphotocreator.platform.printing.PassportPrintDocumentAdapter
+import de.ericbrand.passportphotocreator.platform.printing.launchPrintJob
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
@@ -72,11 +76,9 @@ fun EditorScreen(
             val reqHeight = (height * scale).roundToInt()
 
             previewBitmap = withContext(Dispatchers.IO) {
-                BitmapLoader.loadSampledBitmapFromUri(
+                BitmapLoader.loadBitmapFromUri(
                     context = context,
                     uri = state.imageUri,
-                    reqWidth = reqWidth,
-                    reqHeight = reqHeight
                 )
             }
             onAction(EditorAction.TransformChanged(CropTransform()))
@@ -105,6 +107,29 @@ fun EditorScreen(
                     if (state.cropTransform != CropTransform()){
                         IconButton(onClick = { onAction(EditorAction.TransformChanged(CropTransform())) }) {
                             Icon(Icons.Outlined.RestartAlt, contentDescription = "Reset transformation")
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    previewBitmap?.let {
+                        FloatingActionButton(
+                            onClick = {
+                                val safeActivity =
+                                    context as? Activity ?: return@FloatingActionButton
+
+                                launchPrintJob(
+                                    activity = safeActivity,
+                                    jobName = "Passport photo",
+                                    adapter = PassportPrintDocumentAdapter(
+                                        context = safeActivity,
+                                        previewBitmap = previewBitmap!!,
+                                        cropTransform = state.cropTransform,
+                                        previewSize = previewSize
+                                    )
+                                )
+                            }
+                        ) {
+                            Icon(Icons.Outlined.Print, "Print")
                         }
                     }
                 }

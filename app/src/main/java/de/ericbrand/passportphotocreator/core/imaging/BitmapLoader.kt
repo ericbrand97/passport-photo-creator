@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import androidx.activity.contextaware.OnContextAvailableListener
 import androidx.annotation.DrawableRes
 import kotlin.math.max
 
@@ -37,6 +38,22 @@ object BitmapLoader {
         return requireNotNull(
             BitmapFactory.decodeResource(context.resources, resId, decodeOptions)
         ) { "Failed to decode drawable resource: $resId" }
+    }
+
+    fun loadBitmapFromUri(
+        context: Context,
+        uri: Uri?
+    ): Bitmap? {
+        val resolver = context.contentResolver
+
+        if (uri == null) {
+            Log.d("BitmapLoader", "uri is null, aborting")
+            return null
+        }
+
+        return resolver.openInputStream(uri).use { input ->
+            BitmapFactory.decodeStream(input)
+        }
     }
 
     fun loadSampledBitmapFromUri(

@@ -98,7 +98,7 @@ class PassportPrintDocumentAdapter(
             val dstRects = arrayOfNulls<RectF>(4)
 
             for(i in 0..3){
-                val offset = Offset((i % 2) * (photoWidthPt + padding), (i / 2) * (photoHeightPt + padding))
+                val offset = Offset((i % 2) * photoWidthPt * 1.2f, (i / 2) * photoHeightPt * 1.3f)
                 dstRects[i] = RectF(
                     left + offset.x,
                     top + offset.y,

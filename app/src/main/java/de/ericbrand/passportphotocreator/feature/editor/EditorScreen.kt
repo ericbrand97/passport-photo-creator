@@ -3,20 +3,25 @@ package de.ericbrand.passportphotocreator.feature.editor
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArtTrack
+import androidx.compose.material.icons.outlined.PhotoLibrary
+import androidx.compose.material.icons.outlined.RestartAlt
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -27,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onSizeChanged
@@ -35,8 +41,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import de.ericbrand.passportphotocreator.R
 import de.ericbrand.passportphotocreator.core.imaging.BitmapLoader
+import de.ericbrand.passportphotocreator.core.model.CropTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
@@ -52,7 +58,7 @@ fun EditorScreen(
     var previewSize by remember { mutableStateOf(IntSize.Zero) }
     var previewBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
-    LaunchedEffect(previewSize) {
+    LaunchedEffect(previewSize, state.imageUri) {
         if (previewSize.width > 0 && previewSize.height > 0) {
             // Optional cap so the interactive preview stays lightweight
             val maxLongEdge = 1600
@@ -66,13 +72,14 @@ fun EditorScreen(
             val reqHeight = (height * scale).roundToInt()
 
             previewBitmap = withContext(Dispatchers.IO) {
-                BitmapLoader.loadSampledBitmapFromResource(
+                BitmapLoader.loadSampledBitmapFromUri(
                     context = context,
-                    resId = R.drawable.dummy_passport_photo,
+                    uri = state.imageUri,
                     reqWidth = reqWidth,
                     reqHeight = reqHeight
                 )
             }
+            onAction(EditorAction.TransformChanged(CropTransform()))
         }
     }
 
@@ -88,6 +95,15 @@ fun EditorScreen(
                     actionIconContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
+        },
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    IconButton(onClick = { onAction(EditorAction.PickImageClicked) }) {
+                        Icon(Icons.Outlined.PhotoLibrary, contentDescription = "Pick image")
+                    }
+                }
+            )
         }
     ) { innerPadding ->
         Surface(
@@ -99,12 +115,13 @@ fun EditorScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-                Box(
+                BoxWithConstraints(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .weight(1f, fill = false)
                         .aspectRatio(35f / 45f)
                         .onSizeChanged { previewSize = it }
                 ) {

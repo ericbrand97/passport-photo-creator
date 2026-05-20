@@ -1,11 +1,12 @@
 package de.ericbrand.passportphotocreator.feature.editor
 
+import android.net.Uri
 import androidx.compose.ui.geometry.Offset
 import de.ericbrand.passportphotocreator.core.model.CropTransform
 
 sealed interface EditorAction {
     data object PickImageClicked : EditorAction
-    data class ImageSelected(val uri: String) : EditorAction
+    data class ImageSelected(val uri: Uri) : EditorAction
     data class TransformChanged(
         val transform: CropTransform
     ) : EditorAction

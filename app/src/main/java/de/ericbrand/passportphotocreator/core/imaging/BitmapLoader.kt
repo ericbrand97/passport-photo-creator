@@ -3,6 +3,7 @@ package de.ericbrand.passportphotocreator.core.imaging
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.DrawableRes
 import kotlin.math.max
@@ -40,14 +41,22 @@ object BitmapLoader {
 
     fun loadSampledBitmapFromUri(
         context: Context,
-        uri: android.net.Uri,
+        uri: Uri?,
         reqWidth: Int,
         reqHeight: Int
-    ): Bitmap {
+    ): Bitmap? {
+
+        Log.d("BitmapLoader", "loading bitmap from uri")
+
         val resolver = context.contentResolver
 
         val boundsOptions = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
+        }
+
+        if (uri == null) {
+            Log.d("BitmapLoader", "uri is null, aborting")
+            return null
         }
 
         resolver.openInputStream(uri).use { input ->

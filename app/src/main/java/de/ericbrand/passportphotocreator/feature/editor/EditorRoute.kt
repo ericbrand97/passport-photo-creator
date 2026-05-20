@@ -1,5 +1,8 @@
 package de.ericbrand.passportphotocreator.feature.editor
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,13 +15,31 @@ fun EditorRoute(
 ){
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null)
+            viewModel.onAction(EditorAction.ImageSelected(uri))
+    }
+
     EditorScreen(
         state = state,
         onAction = { action ->
             viewModel.onAction(action)
 
-            if (action is EditorAction.ExportClicked && state.exportReady) {
-                onNavigateToExport()
+            when (action) {
+                EditorAction.PickImageClicked -> {
+                    pickImageLauncher.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                    )
+                }
+                EditorAction.ExportClicked -> {
+                    if (state.exportReady)
+                        onNavigateToExport()
+                }
+                else -> viewModel.onAction(action)
             }
         }
     )

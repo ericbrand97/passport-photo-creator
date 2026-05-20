@@ -102,6 +102,11 @@ fun EditorScreen(
                     IconButton(onClick = { onAction(EditorAction.PickImageClicked) }) {
                         Icon(Icons.Outlined.PhotoLibrary, contentDescription = "Pick image")
                     }
+                    if (state.cropTransform != CropTransform()){
+                        IconButton(onClick = { onAction(EditorAction.TransformChanged(CropTransform())) }) {
+                            Icon(Icons.Outlined.RestartAlt, contentDescription = "Reset transformation")
+                        }
+                    }
                 }
             )
         }

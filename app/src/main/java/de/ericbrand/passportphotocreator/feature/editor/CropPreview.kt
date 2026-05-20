@@ -85,7 +85,7 @@ fun CropPreview(
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(align = Alignment.Center)

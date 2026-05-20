@@ -6,6 +6,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -132,7 +134,10 @@ fun EditorScreen(
                             Icon(Icons.Outlined.Print, "Print")
                         }
                     }
-                }
+                },
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                contentPadding = PaddingValues(horizontal = 20.dp)
             )
         }
     ) { innerPadding ->
@@ -142,7 +147,7 @@ fun EditorScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(innerPadding)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -152,9 +157,17 @@ fun EditorScreen(
                 BoxWithConstraints(
                     modifier = Modifier
                         .weight(1f, fill = false)
+                        .fillMaxSize()
                         .aspectRatio(35f / 45f)
                         .onSizeChanged { previewSize = it }
                 ) {
+                    val backgroundColor = MaterialTheme.colorScheme.surfaceContainerLowest
+
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawRect(
+                            color = backgroundColor,
+                        )
+                    }
                     previewBitmap?.let { bitmap ->
                         CropPreview(
                             bitmap = bitmap,
@@ -175,18 +188,22 @@ fun EditorScreen(
                         else if (state.showGuides == Guides.FACE_HEIGHT) {
                             FaceHeightOverlay()
                         }
-
-                        val borderColor = MaterialTheme.colorScheme.surfaceContainerLow
-                        val borderStrokeWidthPx = 5f
-
-                        Canvas(modifier = Modifier.fillMaxSize()) {
-                            drawRect(
-                                color = borderColor,
-                                style = Stroke(borderStrokeWidthPx)
-                            )
-                        }
                     } ?: run {
-                        Text("Loading preview...")
+                        Text(
+                            "Select an image from your library to crop",
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+
+                    val borderColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    val borderStrokeWidthPx = 5f
+
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        drawRect(
+                            color = borderColor,
+                            style = Stroke(borderStrokeWidthPx)
+                        )
                     }
                 }
 

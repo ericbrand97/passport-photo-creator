@@ -18,7 +18,8 @@ class EditorViewModel : ViewModel() {
                         imageUri = action.uri,
                         imageLoaded = true,
                         exportReady = true,
-                        errorMessage = null
+                        errorMessage = null,
+                        showGuides = Guides.NONE
                     )
                 }
             }

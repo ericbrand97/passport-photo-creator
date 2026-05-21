@@ -1,5 +1,13 @@
 <resources>
-    <string name="app_name">Passport Photo Creator</string>
+    <string name="app_name" translatable="false">Passport Photo Creator</string>
     <string name="app_name_short">PassPhoto</string>
+    <string name="pick_image_description">Pick image</string>
+    <string name="reset_transform_description">Reset transformation</string>
+    <string name="print_description">Print</string>
+    <string name="select_image_user_action">Select an image from your photo library to edit</string>
+    <string name="guides_none_label">None</string>
+    <string name="guides_position_label">Position</string>
+    <string name="guides_face_height_label">Face height</string>
+    <string name="guides_label">Guides</string>
 
 </resources>

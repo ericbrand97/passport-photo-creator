@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_short">Passfoto</string>
+    <string name="pick_image_description">Bild auswählen</string>
+    <string name="reset_transform_description">Transformation zurücksetzen</string>
+    <string name="print_description">Drucken</string>
+    <string name="select_image_user_action">Wähle ein Bild zum bearbeiten aus deiner Galerie aus</string>
+    <string name="guides_none_label">Keine</string>
+    <string name="guides_position_label">Position</string>
+    <string name="guides_face_height_label">Gesichtshöhe</string>
+    <string name="guides_label">Hilfslinien</string>
+</resources>

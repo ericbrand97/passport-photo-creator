@@ -42,9 +42,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import de.ericbrand.passportphotocreator.R
 import de.ericbrand.passportphotocreator.core.imaging.BitmapLoader
 import de.ericbrand.passportphotocreator.core.model.CropTransform
 import de.ericbrand.passportphotocreator.platform.printing.PassportPrintDocumentAdapter
@@ -90,7 +92,7 @@ fun EditorScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Passport Photo Creator") },
+                title = { stringResource(R.string.app_name) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -104,11 +106,11 @@ fun EditorScreen(
             BottomAppBar(
                 actions = {
                     IconButton(onClick = { onAction(EditorAction.PickImageClicked) }) {
-                        Icon(Icons.Outlined.PhotoLibrary, contentDescription = "Pick image")
+                        Icon(Icons.Outlined.PhotoLibrary, contentDescription = stringResource(R.string.pick_image_description))
                     }
                     if (state.cropTransform != CropTransform()){
                         IconButton(onClick = { onAction(EditorAction.TransformChanged(CropTransform())) }) {
-                            Icon(Icons.Outlined.RestartAlt, contentDescription = "Reset transformation")
+                            Icon(Icons.Outlined.RestartAlt, contentDescription = stringResource(R.string.reset_transform_description))
                         }
                     }
                 },
@@ -131,7 +133,7 @@ fun EditorScreen(
                                 )
                             }
                         ) {
-                            Icon(Icons.Outlined.Print, "Print")
+                            Icon(Icons.Outlined.Print, stringResource(R.string.print_description))
                         }
                     }
                 },
@@ -190,7 +192,7 @@ fun EditorScreen(
                         }
                     } ?: run {
                         Text(
-                            "Select an image from your library to crop",
+                            stringResource(R.string.select_image_user_action),
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.align(Alignment.Center)
                         )
@@ -211,7 +213,7 @@ fun EditorScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ){
                     Text(
-                        text = "Guides",
+                        text = stringResource(R.string.guides_label),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.semantics { heading() }
                     )
@@ -227,9 +229,9 @@ fun EditorScreen(
                                 label = {
                                     Text(
                                         when (option) {
-                                            Guides.NONE -> "None"
-                                            Guides.POSITION -> "Position"
-                                            Guides.FACE_HEIGHT -> "Face height"
+                                            Guides.NONE -> stringResource(R.string.guides_none_label)
+                                            Guides.POSITION -> stringResource(R.string.guides_position_label)
+                                            Guides.FACE_HEIGHT -> stringResource(R.string.guides_face_height_label)
                                         }
                                     )
                                 }

@@ -68,7 +68,6 @@ fun EditorScreen(
 
     LaunchedEffect(previewSize, state.imageUri) {
         if (previewSize.width > 0 && previewSize.height > 0) {
-            // Optional cap so the interactive preview stays lightweight
             val maxLongEdge = 1600
             val width = previewSize.width
             val height = previewSize.height
@@ -76,8 +75,6 @@ fun EditorScreen(
                 1f,
                 maxLongEdge / maxOf(width, height).toFloat()
             )
-            val reqWidth = (width * scale).roundToInt()
-            val reqHeight = (height * scale).roundToInt()
 
             previewBitmap = withContext(Dispatchers.IO) {
                 BitmapLoader.loadBitmapFromUri(

@@ -71,10 +71,6 @@ fun EditorScreen(
             val maxLongEdge = 1600
             val width = previewSize.width
             val height = previewSize.height
-            val scale = minOf(
-                1f,
-                maxLongEdge / maxOf(width, height).toFloat()
-            )
 
             previewBitmap = withContext(Dispatchers.IO) {
                 BitmapLoader.loadBitmapFromUri(

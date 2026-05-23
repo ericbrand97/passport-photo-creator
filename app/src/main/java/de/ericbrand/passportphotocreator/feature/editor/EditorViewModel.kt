@@ -19,7 +19,7 @@ class EditorViewModel : ViewModel() {
                         imageLoaded = true,
                         exportReady = true,
                         errorMessage = null,
-                        showGuides = Guides.NONE
+                        showGuides = Guides.POSITION
                     )
                 }
             }

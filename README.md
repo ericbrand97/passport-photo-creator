@@ -1,3 +1,5 @@
+[![Get it on Obtainium](https://img.shields.io/badge/Get%20it%20on-Obtainium-5C2D91)](http://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/ericbrand97/passport-photo-creator) [![Download APK](https://img.shields.io/badge/Download-APK-2ea44f?logo=android&logoColor=white)](https://github.com/ericbrand97/passport-photo-creator/releases/latest)
+
 # Passport Photo Creator
 
 An open-source Android app for creating printable biometric passport photos with visual guide overlays.
@@ -13,7 +15,15 @@ This app is intended to help users create printed passport photos as they are re
 
 ## Installation
 
-Install the APK file from GitHub releases manually or via Obtainium.
+<a href="http://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/ericbrand97/passport-photo-creator">
+  <img
+    src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png"
+    alt="Get it on Obtainium"
+    height="50"
+  />
+</a>
+
+or download the [APK](https://github.com/ericbrand97/passport-photo-creator/releases/latest) from GitHub and install it manually.
 
 ## Building from source
 

@@ -9,4 +9,5 @@
     <string name="guides_position_label">Position</string>
     <string name="guides_face_height_label">Gesichtshöhe</string>
     <string name="guides_label">Hilfslinien</string>
+    <string name="guides_combined_label">Kombiniert</string>
 </resources>

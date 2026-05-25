@@ -9,5 +9,6 @@
     <string name="guides_position_label">Position</string>
     <string name="guides_face_height_label">Face height</string>
     <string name="guides_label">Guides</string>
+    <string name="guides_combined_label">Combined</string>
 
 </resources>

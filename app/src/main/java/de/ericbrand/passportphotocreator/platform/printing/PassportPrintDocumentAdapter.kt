@@ -23,13 +23,17 @@ import java.io.IOException
 import kotlin.math.roundToInt
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withSave
+import androidx.core.math.MathUtils.clamp
+import de.ericbrand.passportphotocreator.core.model.PhotoSpec
 import kotlin.math.max
+import kotlin.math.min
 
 class PassportPrintDocumentAdapter(
     private val context: Context,
     private val previewBitmap: Bitmap,
     private val cropTransform: CropTransform,
-    private val previewSize: IntSize
+    private val previewSize: IntSize,
+    private val photoSpec: PhotoSpec
 ) : PrintDocumentAdapter() {
 
     private var pdfDocument: PrintedPdfDocument? = null
@@ -85,11 +89,11 @@ class PassportPrintDocumentAdapter(
 
             canvas.drawColor(Color.WHITE)
 
-            val photoWidthPt = 35f * mmToPt
-            val photoHeightPt = 45f * mmToPt
+            val photoWidthPt = photoSpec.sizeMm.width * mmToPt
+            val photoHeightPt = photoSpec.sizeMm.height * mmToPt
 
-            val photoWidthPx = (35f * mmToPx).roundToInt()
-            val photoHeightPx = (45f * mmToPx).roundToInt()
+            val photoWidthPx = (photoSpec.sizeMm.width * mmToPx).roundToInt()
+            val photoHeightPx = (photoSpec.sizeMm.height * mmToPx).roundToInt()
 
             val padding = 10f * mmToPt
 
@@ -100,9 +104,9 @@ class PassportPrintDocumentAdapter(
             for(i in 0..3){
                 val offset = Offset((i % 2) * photoWidthPt * 1.2f, (i / 2) * photoHeightPt * 1.3f)
                 dstRects[i] = RectF(
-                    left + offset.x,
+                    clamp(left + offset.x, 0f, contentRect.right - photoWidthPt),
                     top + offset.y,
-                    left + photoWidthPt + offset.x,
+                    clamp(left + photoWidthPt + offset.x, photoWidthPt, contentRect.right.toFloat()),
                     top + photoHeightPt + offset.y
                 )
             }

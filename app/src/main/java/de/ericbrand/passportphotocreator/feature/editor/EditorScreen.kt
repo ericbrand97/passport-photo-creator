@@ -121,7 +121,8 @@ fun EditorScreen(
                                         context = safeActivity,
                                         previewBitmap = previewBitmap!!,
                                         cropTransform = state.cropTransform,
-                                        previewSize = previewSize
+                                        previewSize = previewSize,
+                                        photoSpec = state.photoSpec
                                     )
                                 )
                             }
@@ -153,7 +154,7 @@ fun EditorScreen(
                     modifier = Modifier
                         .weight(1f, fill = false)
                         .fillMaxSize()
-                        .aspectRatio(35f / 45f)
+                        .aspectRatio(state.photoSpec.sizeMm.width / state.photoSpec.sizeMm.height)
                         .onSizeChanged { previewSize = it }
                 ) {
                     val backgroundColor = MaterialTheme.colorScheme.surfaceContainerLowest
@@ -176,13 +177,13 @@ fun EditorScreen(
                             modifier = Modifier.matchParentSize()
                         )
 
-                        if (state.showGuides == Guides.POSITION) {
-                            PositionOverlay()
+                        when (state.showGuides){
+                            Guides.POSITION -> PositionOverlay(photoSpec = state.photoSpec)
+                            Guides.FACE_HEIGHT -> FaceHeightOverlay(photoSpec = state.photoSpec)
+                            Guides.COMBINED -> CombinedOverlay(photoSpec = state.photoSpec)
+                            Guides.NONE -> Unit
                         }
 
-                        else if (state.showGuides == Guides.FACE_HEIGHT) {
-                            FaceHeightOverlay()
-                        }
                     } ?: run {
                         Text(
                             stringResource(R.string.select_image_user_action),
@@ -214,17 +215,25 @@ fun EditorScreen(
                     SingleChoiceSegmentedButtonRow(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Guides.entries.forEachIndexed { index, option ->
+                        var guides: Array<Guides> = arrayOf(Guides.NONE)
+
+                        Guides.entries.forEach {
+                            if (it in state.photoSpec.guideOverlays)
+                                guides += it
+                        }
+
+                        guides.forEachIndexed { index, option ->
                             SegmentedButton(
                                 onClick = { onAction(EditorAction.GuidesSelected(option)) },
                                 selected = state.showGuides == option,
-                                shape = SegmentedButtonDefaults.itemShape(index, Guides.entries.size),
+                                shape = SegmentedButtonDefaults.itemShape(index, guides.size),
                                 label = {
                                     Text(
                                         when (option) {
                                             Guides.NONE -> stringResource(R.string.guides_none_label)
                                             Guides.POSITION -> stringResource(R.string.guides_position_label)
                                             Guides.FACE_HEIGHT -> stringResource(R.string.guides_face_height_label)
+                                            Guides.COMBINED -> stringResource(R.string.guides_combined_label)
                                         }
                                     )
                                 }
